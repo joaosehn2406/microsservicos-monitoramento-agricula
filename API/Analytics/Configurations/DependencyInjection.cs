@@ -1,5 +1,4 @@
 using Analytics.Data;
-using Analytics.Exceptions;
 using Analytics.Messaging.Consumers;
 using Analytics.Messaging.Publishers;
 using Analytics.Repositories;
@@ -23,8 +22,6 @@ public static class DependencyInjection
         services.AddScoped<IWeatherAnalysisService, WeatherAnalysisService>();
         services.AddSingleton<WeatherReadingConsumer>();
         services.AddSingleton<IAlertPublisher, AlertPublisher>();
-        services.AddExceptionHandler<GlobalExceptionHandler>();
-        services.AddProblemDetails();
 
         return services;
     }

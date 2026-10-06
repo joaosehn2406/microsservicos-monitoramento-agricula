@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Storage.Data;
-using Storage.Exceptions;
 using Storage.Messaging.Consumers;
 using Storage.Repositories;
 using Storage.Services;
@@ -19,8 +18,6 @@ public static class DependencyInjection
         services.AddScoped<IWeatherReadingRepository, WeatherReadingRepository>();
         services.AddScoped<IWeatherReadingService, WeatherReadingService>();
         services.AddSingleton<WeatherReadingConsumer>();
-        services.AddExceptionHandler<GlobalExceptionHandler>();
-        services.AddProblemDetails();
 
         return services;
     }

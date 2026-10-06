@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Notifications.Data;
-using Notifications.Exceptions;
 using Notifications.Messaging.Consumers;
 using Notifications.Repositories;
 using Notifications.Services;
@@ -19,8 +18,6 @@ public static class DependencyInjection
         services.AddScoped<INotificationRepository, NotificationRepository>();
         services.AddScoped<INotificationService, NotificationService>();
         services.AddSingleton<AlertCreatedConsumer>();
-        services.AddExceptionHandler<GlobalExceptionHandler>();
-        services.AddProblemDetails();
 
         return services;
     }
