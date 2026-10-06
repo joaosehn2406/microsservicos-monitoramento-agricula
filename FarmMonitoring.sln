@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{D82C56D6-B2CD-F611-9E31-04638F7EC30E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Properties", "API\Properties\Properties.csproj", "{1B0C98F8-31B5-498C-ABBA-05A2496ED68F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackendApi", "API\BackendApi\BackendApi.csproj", "{1B0C98F8-31B5-498C-ABBA-05A2496ED68F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherCollector", "API\WeatherCollector\WeatherCollector.csproj", "{8B95A553-4250-4B27-BDAB-4FEE0E580EB8}"
 EndProject

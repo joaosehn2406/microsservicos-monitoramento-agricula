@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Properties.Controllers;
+namespace BackendApi.Controllers;
 
 [ApiController]
 [Route("api/properties")]

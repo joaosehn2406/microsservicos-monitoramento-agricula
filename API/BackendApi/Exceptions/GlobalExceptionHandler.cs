@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Properties.Exceptions;
+namespace BackendApi.Exceptions;
 
 public sealed class GlobalExceptionHandler : IExceptionHandler
 {

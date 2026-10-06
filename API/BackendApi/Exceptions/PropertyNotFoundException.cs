@@ -1,4 +1,4 @@
-namespace Properties.Exceptions;
+namespace BackendApi.Exceptions;
 
 public sealed class PropertyNotFoundException : Exception
 {

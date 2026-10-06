@@ -1,4 +1,4 @@
-namespace Properties.Entities;
+namespace BackendApi.Entities;
 
 public sealed class Property
 {

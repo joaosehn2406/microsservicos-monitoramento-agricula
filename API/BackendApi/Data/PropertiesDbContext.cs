@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Properties.Entities;
+using BackendApi.Entities;
 
-namespace Properties.Data;
+namespace BackendApi.Data;
 
 public sealed class PropertiesDbContext(DbContextOptions<PropertiesDbContext> options)
     : DbContext(options)

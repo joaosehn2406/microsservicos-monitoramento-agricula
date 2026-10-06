@@ -1,4 +1,4 @@
-namespace Properties.Services;
+namespace BackendApi.Services;
 
 public sealed class PropertyService : IPropertyService
 {

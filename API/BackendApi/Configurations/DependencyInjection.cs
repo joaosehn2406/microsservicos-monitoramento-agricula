@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using Properties.Data;
-using Properties.Exceptions;
-using Properties.Repositories;
-using Properties.Services;
+using BackendApi.Data;
+using BackendApi.Exceptions;
+using BackendApi.Repositories;
+using BackendApi.Services;
 
-namespace Properties.Configurations;
+namespace BackendApi.Configurations;
 
 public static class DependencyInjection
 {

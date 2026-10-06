@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Properties.Entities;
+using BackendApi.Entities;
 
-namespace Properties.Data.Configurations;
+namespace BackendApi.Data.Configurations;
 
 public sealed class PropertyConfiguration : IEntityTypeConfiguration<Property>
 {

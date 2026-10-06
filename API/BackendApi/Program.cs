@@ -1,4 +1,4 @@
-using Properties.Configurations;
+using BackendApi.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
