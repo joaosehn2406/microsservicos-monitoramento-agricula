@@ -1,0 +1,190 @@
+services:
+  properties:
+    build:
+      context: .
+      dockerfile: API/Properties/Dockerfile
+    ports:
+      - "8081:8080"
+    environment:
+      ConnectionStrings__DefaultConnection: Host=postgres-properties;Port=5432;Database=properties_db;Username=${POSTGRES_USER:-farm};Password=${POSTGRES_PASSWORD:-farm_password}
+    depends_on:
+      postgres-properties:
+        condition: service_healthy
+    networks: [farm-network]
+
+  weather-collector:
+    build:
+      context: .
+      dockerfile: API/WeatherCollector/Dockerfile
+    ports:
+      - "8082:8080"
+    environment:
+      ConnectionStrings__DefaultConnection: Host=postgres-weather-collector;Port=5432;Database=weather_collector_db;Username=${POSTGRES_USER:-farm};Password=${POSTGRES_PASSWORD:-farm_password}
+      RabbitMq__Host: rabbitmq
+      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
+      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+      Services__Properties__BaseUrl: http://properties:8080
+    depends_on:
+      postgres-weather-collector:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks: [farm-network]
+
+  storage:
+    build:
+      context: .
+      dockerfile: API/Storage/Dockerfile
+    ports:
+      - "8083:8080"
+    environment:
+      ConnectionStrings__DefaultConnection: Host=postgres-storage;Port=5432;Database=storage_db;Username=${POSTGRES_USER:-farm};Password=${POSTGRES_PASSWORD:-farm_password}
+      RabbitMq__Host: rabbitmq
+      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
+      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+    depends_on:
+      postgres-storage:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks: [farm-network]
+
+  analytics:
+    build:
+      context: .
+      dockerfile: API/Analytics/Dockerfile
+    ports:
+      - "8084:8080"
+    environment:
+      ConnectionStrings__DefaultConnection: Host=postgres-analytics;Port=5432;Database=analytics_db;Username=${POSTGRES_USER:-farm};Password=${POSTGRES_PASSWORD:-farm_password}
+      RabbitMq__Host: rabbitmq
+      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
+      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+    depends_on:
+      postgres-analytics:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks: [farm-network]
+
+  notifications:
+    build:
+      context: .
+      dockerfile: API/Notifications/Dockerfile
+    ports:
+      - "8085:8080"
+    environment:
+      ConnectionStrings__DefaultConnection: Host=postgres-notifications;Port=5432;Database=notifications_db;Username=${POSTGRES_USER:-farm};Password=${POSTGRES_PASSWORD:-farm_password}
+      RabbitMq__Host: rabbitmq
+      RabbitMq__Username: ${RABBITMQ_DEFAULT_USER:-guest}
+      RabbitMq__Password: ${RABBITMQ_DEFAULT_PASS:-guest}
+    depends_on:
+      postgres-notifications:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks: [farm-network]
+
+  postgres-properties:
+    image: postgres:17-alpine
+    ports: ["5432:5432"]
+    environment:
+      POSTGRES_DB: properties_db
+      POSTGRES_USER: ${POSTGRES_USER:-farm}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-farm_password}
+    volumes: [properties-data:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-farm} -d properties_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks: [farm-network]
+
+  postgres-weather-collector:
+    image: postgres:17-alpine
+    ports: ["5433:5432"]
+    environment:
+      POSTGRES_DB: weather_collector_db
+      POSTGRES_USER: ${POSTGRES_USER:-farm}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-farm_password}
+    volumes: [weather-collector-data:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-farm} -d weather_collector_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks: [farm-network]
+
+  postgres-storage:
+    image: postgres:17-alpine
+    ports: ["5434:5432"]
+    environment:
+      POSTGRES_DB: storage_db
+      POSTGRES_USER: ${POSTGRES_USER:-farm}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-farm_password}
+    volumes: [storage-data:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-farm} -d storage_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks: [farm-network]
+
+  postgres-analytics:
+    image: postgres:17-alpine
+    ports: ["5435:5432"]
+    environment:
+      POSTGRES_DB: analytics_db
+      POSTGRES_USER: ${POSTGRES_USER:-farm}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-farm_password}
+    volumes: [analytics-data:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-farm} -d analytics_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks: [farm-network]
+
+  postgres-notifications:
+    image: postgres:17-alpine
+    ports: ["5436:5432"]
+    environment:
+      POSTGRES_DB: notifications_db
+      POSTGRES_USER: ${POSTGRES_USER:-farm}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-farm_password}
+    volumes: [notifications-data:/var/lib/postgresql/data]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-farm} -d notifications_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks: [farm-network]
+
+  rabbitmq:
+    image: rabbitmq:4-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:-guest}
+    volumes: [rabbitmq-data:/var/lib/rabbitmq]
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks: [farm-network]
+
+volumes:
+  properties-data:
+  weather-collector-data:
+  storage-data:
+  analytics-data:
+  notifications-data:
+  rabbitmq-data:
+
+networks:
+  farm-network:
+    driver: bridge
+
