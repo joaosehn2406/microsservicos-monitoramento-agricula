@@ -7,7 +7,7 @@ public sealed class StorageDbContext(DbContextOptions<StorageDbContext> options)
     : DbContext(options)
 {
     public DbSet<WeatherReading> WeatherReadings => Set<WeatherReading>();
-    public DbSet<ProcessedMessage> ProcessedMessages => Set<ProcessedMessage>();
+    public DbSet<ProcessedEvent> ProcessedEvents => Set<ProcessedEvent>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
