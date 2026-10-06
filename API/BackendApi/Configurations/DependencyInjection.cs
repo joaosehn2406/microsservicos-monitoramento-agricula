@@ -13,7 +13,7 @@ public static class DependencyInjection
         IConfiguration configuration)
     {
         services.AddDbContext<PropertiesDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+            options.UseNpgsql(configuration.GetConnectionString("Postgres")));
         services.AddScoped<IPropertyRepository, PropertyRepository>();
         services.AddScoped<IPropertyService, PropertyService>();
         services.AddExceptionHandler<GlobalExceptionHandler>();

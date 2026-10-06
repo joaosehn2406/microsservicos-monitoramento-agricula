@@ -1,10 +1,4 @@
-using Analytics.Configurations;
+var builder = Host.CreateApplicationBuilder(args);
 
-var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddControllers();
-builder.Services.AddApplicationServices(builder.Configuration);
-
-var app = builder.Build();
-app.UseExceptionHandler();
-app.MapControllers();
-app.Run();
+var host = builder.Build();
+host.Run();
