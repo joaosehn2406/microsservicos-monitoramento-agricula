@@ -9,4 +9,5 @@ public sealed class RabbitMqOptions
     public string Username { get; init; } = "guest";
     public string Password { get; init; } = "guest";
     public string Exchange { get; init; } = "farm.events";
+    public int ReconnectDelaySeconds { get; init; } = 5;
 }
