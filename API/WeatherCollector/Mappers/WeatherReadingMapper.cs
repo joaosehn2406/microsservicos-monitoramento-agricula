@@ -28,7 +28,9 @@ public static class WeatherReadingMapper
 
         return new WeatherReadingEvent(
             Guid.NewGuid(),
+            "weather.reading",
             collectedAt.ToUniversalTime(),
+            "weather-collector",
             client.Id,
             property.Id,
             property.Name,

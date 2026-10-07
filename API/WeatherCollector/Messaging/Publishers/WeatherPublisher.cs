@@ -68,7 +68,8 @@ public sealed class WeatherPublisher(
                         ContentType = "application/json",
                         DeliveryMode = DeliveryModes.Persistent,
                         MessageId = weatherEvent.EventId.ToString(),
-                        Type = RoutingKey
+                        Type = RoutingKey,
+                        Timestamp = new AmqpTimestamp(DateTimeOffset.UtcNow.ToUnixTimeSeconds())
                     };
 
                     await _channel!.BasicPublishAsync(
