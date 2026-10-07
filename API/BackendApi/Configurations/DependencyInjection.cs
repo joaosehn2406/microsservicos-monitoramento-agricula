@@ -14,6 +14,7 @@ public static class DependencyInjection
             options.UseNpgsql(configuration.GetConnectionString("Postgres")));
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
+        services.AddOpenApi();
 
         return services;
     }
