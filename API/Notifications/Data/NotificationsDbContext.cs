@@ -7,5 +7,11 @@ public sealed class NotificationsDbContext(DbContextOptions<NotificationsDbConte
     : DbContext(options)
 {
     public DbSet<Notification> Notifications => Set<Notification>();
-    public DbSet<ProcessedMessage> ProcessedMessages => Set<ProcessedMessage>();
+    public DbSet<ProcessedEvent> ProcessedEvents => Set<ProcessedEvent>();
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(NotificationsDbContext).Assembly);
+        base.OnModelCreating(modelBuilder);
+    }
 }
