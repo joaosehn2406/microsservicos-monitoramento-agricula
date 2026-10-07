@@ -16,6 +16,12 @@ public static class DependencyInjection
             options.UseNpgsql(configuration.GetConnectionString("Postgres")));
         services.AddScoped<IAlertRuleRepository, AlertRuleRepository>();
         services.AddScoped<IAlertRuleService, AlertRuleService>();
+        services.AddScoped<IWeatherReadingRepository, WeatherReadingRepository>();
+        services.AddScoped<IWeatherReadingService, WeatherReadingService>();
+        services.AddScoped<IAlertRepository, AlertRepository>();
+        services.AddScoped<IAlertService, AlertService>();
+        services.AddScoped<INotificationRepository, NotificationRepository>();
+        services.AddScoped<INotificationService, NotificationService>();
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
         services.AddOpenApi();
