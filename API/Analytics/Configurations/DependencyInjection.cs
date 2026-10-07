@@ -1,8 +1,10 @@
 using Analytics.Data;
 using Analytics.Messaging.Consumers;
+using Analytics.Messaging.Infrastructure;
 using Analytics.Messaging.Publishers;
 using Analytics.Repositories;
 using Analytics.Services;
+using Analytics.Workers;
 using Microsoft.EntityFrameworkCore;
 
 namespace Analytics.Configurations;
@@ -16,12 +18,14 @@ public static class DependencyInjection
         services.AddDbContext<AnalyticsDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("Postgres")));
         services.Configure<RabbitMqOptions>(configuration.GetSection(RabbitMqOptions.SectionName));
+        services.Configure<DlqReprocessOptions>(configuration.GetSection(DlqReprocessOptions.SectionName));
+        services.AddSingleton<RabbitMqConnectionProvider>();
+        services.AddSingleton<IAlertPublisher, AlertPublisher>();
         services.AddScoped<IAlertRuleRepository, AlertRuleRepository>();
         services.AddScoped<IAlertRepository, AlertRepository>();
-        services.AddScoped<IAlertRuleService, AlertRuleService>();
         services.AddScoped<IWeatherAnalysisService, WeatherAnalysisService>();
-        services.AddSingleton<WeatherReadingConsumer>();
-        services.AddSingleton<IAlertPublisher, AlertPublisher>();
+        services.AddHostedService<WeatherReadingConsumer>();
+        services.AddHostedService<DlqReprocessingJob>();
 
         return services;
     }

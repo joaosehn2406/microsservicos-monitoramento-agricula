@@ -3,6 +3,7 @@ using Analytics.Exceptions;
 using Analytics.Mappers;
 using Analytics.Messaging.Contracts;
 using Analytics.Messaging.Infrastructure;
+using Analytics.Messaging.Publishers;
 using Analytics.Repositories;
 
 namespace Analytics.Services;
@@ -10,6 +11,7 @@ namespace Analytics.Services;
 public sealed class WeatherAnalysisService(
     IAlertRuleRepository ruleRepository,
     IAlertRepository alertRepository,
+    IAlertPublisher publisher,
     ILogger<WeatherAnalysisService> logger) : IWeatherAnalysisService
 {
     public const string ConsumerName = "analytics";
@@ -29,9 +31,26 @@ public sealed class WeatherAnalysisService(
             return ProcessingResult.Duplicate;
         }
 
+        // Committed: publish every alert even during shutdown, so the reading is only ACKed afterwards.
+        var published = 0;
+        foreach (var alert in alerts)
+        {
+            if (await publisher.PublishAsync(AlertMapper.ToEvent(alert), CancellationToken.None))
+            {
+                published++;
+            }
+            else
+            {
+                logger.LogError(
+                    "Alert {AlertId} of reading {EventId} is stored but was not published; no notification will be sent",
+                    alert.Id, message.EventId);
+            }
+        }
+
         logger.LogInformation(
-            "Reading {EventId} analysed: {RulesEvaluated} rules evaluated, {AlertsRaised} alerts raised",
-            message.EventId, rules.Count, alerts.Count);
+            "Reading {EventId} analysed: {RulesEvaluated} rules evaluated, {AlertsRaised} alerts raised, " +
+            "{AlertsPublished} published",
+            message.EventId, rules.Count, alerts.Count, published);
 
         return ProcessingResult.Processed;
     }
