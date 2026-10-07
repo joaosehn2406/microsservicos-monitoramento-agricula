@@ -8,6 +8,7 @@ public sealed class RabbitMqOptions
     public int Port { get; init; } = 5672;
     public string Username { get; init; } = "guest";
     public string Password { get; init; } = "guest";
+    public ushort PrefetchCount { get; init; } = 10;
     public string Exchange { get; init; } = "farm.events";
     public string Queue { get; init; } = "q.notifications";
     public string BindingKey { get; init; } = "alert.#";
