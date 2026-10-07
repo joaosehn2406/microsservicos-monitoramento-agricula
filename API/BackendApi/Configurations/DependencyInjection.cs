@@ -1,8 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using BackendApi.Data;
 using BackendApi.Exceptions;
-using BackendApi.Repositories;
-using BackendApi.Services;
 
 namespace BackendApi.Configurations;
 
@@ -12,10 +10,8 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        services.AddDbContext<PropertiesDbContext>(options =>
+        services.AddDbContext<BackendDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("Postgres")));
-        services.AddScoped<IPropertyRepository, PropertyRepository>();
-        services.AddScoped<IPropertyService, PropertyService>();
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
 
