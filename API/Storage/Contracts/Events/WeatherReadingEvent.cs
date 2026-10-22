@@ -1,0 +1,17 @@
+namespace Storage.Contracts.Events;
+
+public sealed record WeatherReadingEvent
+{
+    public required Guid EventId { get; init; }
+    public required DateTime CollectedAt { get; init; }
+    public required string ClientId { get; init; }
+    public required Guid PropertyId { get; init; }
+    public required string PropertyName { get; init; }
+    public required double Latitude { get; init; }
+    public required double Longitude { get; init; }
+    public required DateTime ObservedAt { get; init; }
+    public required double TemperatureCelsius { get; init; }
+    public required double RelativeHumidityPercent { get; init; }
+    public required double PrecipitationMm { get; init; }
+    public required double SoilMoisture { get; init; }
+}

@@ -9,7 +9,6 @@ x-dotnet-env: &dotnet-env
 x-consumer-env: &consumer-env
   <<: *dotnet-env
   RabbitMq__PrefetchCount: ${RabbitMq__PrefetchCount:-10}
-  Messaging__DlqReprocess__IntervalMinutes: ${Messaging__DlqReprocess__IntervalMinutes:-5}
 
 x-infra-deps: &infra-deps
   postgres:
@@ -97,10 +96,10 @@ services:
     restart: unless-stopped
     networks: [farm-network]
 
-  backend-api:
+  monitoring-api:
     build:
       context: .
-      dockerfile: API/BackendApi/Dockerfile
+      dockerfile: API/MonitoringApi/Dockerfile
     ports: ["8080:8080"]
     environment:
       <<: *dotnet-env
