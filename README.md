@@ -31,9 +31,11 @@ Para seguir uma leitura, comece no `ClientCollectorJob` do WeatherCollector, pas
 
 `ProcessedEvent` usa a chave composta `(EventId, Consumer)` e não herda `BaseEntity`. Os contratos de eventos e os DTOs também ficam fora dessa herança.
 
-## Como os serviços se comunicam
+## Como os serviços se comunicam hoje
 
-![Fluxo de uma leitura meteorológica no FarmMonitoring](docs/fluxo-farmmonitoring.png)
+![Fluxo atual de uma leitura meteorológica no FarmMonitoring](docs/fluxo-farmmonitoring.png)
+
+A proposta de **dois serviços com bancos próprios** está em [Arquitetura proposta](docs/arquitetura-proposta.md). Ela ainda não foi implementada.
 
 Há **dois tipos de mensagem**:
 
